@@ -27,7 +27,7 @@ function getRawApiResponse(formData){
     return new Promise(function(resolve, reject){
         request.post(
             {
-                url: 'http://safety.shoora.com/auth/api/v1/token/',
+                url: 'http://admin.shoora.com/auth/api/v1/token/',
                 form: formData
             },
             function (error, response, body) {
