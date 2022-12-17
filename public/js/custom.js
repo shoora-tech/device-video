@@ -15,6 +15,11 @@ var livesession = '';
 const liveVideoIndex = 0;
 var isInitFinished = false;
 var swfobject;
+var videoTilesDevices = [];
+for(var i=0; i<devices.length; i++){
+    videoTilesDevices.push(devices[i]);
+    videoTilesDevices.push(devices[i]);
+}
 function onReady() {
     initPlayerExample();
 }
@@ -322,7 +327,7 @@ function onTtxVideoMsg(index, type) {
     //window message
     if (type == "select") {
         selectIndex = index;
-        $('#eventTip', 'Select event: selected  Window ' + (index + 1) + ' ');
+        //$('#eventTip', 'Select event: selected  Window ' + (index + 1) + ' ');
     } else if (type == "full") {
     } else if (type == "norm") {
     }
@@ -401,6 +406,40 @@ function checkIsPlaying() {
         alert("The currently selected window is Playing video now");
     } else {
         alert('There is no video playback in the current selected window');
+    }
+}
+
+function startTalkback() {
+    if (!isInitFinished) {
+        return;
+    } else {
+        //会话号
+        var jsession = livesession;
+      
+        var devIdno = videoTilesDevices[selectIndex];
+        console.log('devIdno',devIdno);
+        
+        swfobject.setTalkParam(1);
+        var ret = swfobject.startTalkback(jsession, devIdno, 0);
+        
+        if (ret == 0) {
+        } else if (ret == 1) {
+        } else if (ret == 2) {
+            alert('Null Mic');
+        } else if (ret == 3) {
+            //alert(lang.micStop);
+            alert('Open Mic');
+        } else {
+        }
+        //flash end
+    }
+}
+
+function stopTalkback() {
+    if (!isInitFinished) {
+        return;
+    } else {
+        swfobject.stopTalkback();
     }
 }
 
