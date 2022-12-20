@@ -1,10 +1,11 @@
 
 var deviceList = document.getElementById('devicelist').value;
+var jsession = document.getElementById('jsessionid').value;
 
 var devices = deviceList.split(',');
 var windowNum = 9;
 windowNum = devices.length * 2;
-const serverIp = '8.218.32.7';
+const serverIp = 'dsm.shoora.com';
 const serverPort = 6605;
 const languagePath = 'en.xml';
 var selectIndex = 0;
@@ -41,7 +42,8 @@ function initPlayerExample() {
     }
     swfobject = new Cmsv6Player(options);
     initFlash();
-    userLogin();
+    // userLogin();
+    initSession();
 }
 
 function initFlash() {
@@ -111,185 +113,318 @@ function convertData(data) {
         return data;
     }
 }
-function userLogin() {
-    var xhr = new XMLHttpRequest();
-    var _url = location.protocol + '//dsm.shoora.com'  + '/StandardApiAction_login.action?account=' + account
-        + "&password=" + password;
-    ajax({
-        type: 'POST',
-        url: _url,
-        cache: false,
-        dataType: 'json',
-        success: function (data) {
-            if (data.result == 0) {
-                livesession = data.jsession;
-                var minBufferTime = 0;
-                var maxBufferTime = 6;
-                var pos = 0;
-                for(var i=0; i<devices.length; i++){
-                    if(i == 0){
-                        pos = i;
-                    }
-                    var nextpos = pos + 1;
-                    playLiveVideo(pos,livesession,devices[i],0,1,'Vehicle-'+devices[i],minBufferTime,maxBufferTime);
-                    playLiveVideo(nextpos,livesession,devices[i],1,1,'Vehicle-'+devices[i],minBufferTime,maxBufferTime);
-                    pos = nextpos + 1;
-                }
+// function userLogin() {
+//     var xhr = new XMLHttpRequest();
+//     var _url = location.protocol + '//dsm.shoora.com'  + '/StandardApiAction_login.action?account=' + account
+//         + "&password=" + password;
+//     ajax({
+//         type: 'POST',
+//         url: _url,
+//         cache: false,
+//         dataType: 'json',
+//         success: function (data) {
+//             if (data.result == 0) {
+//                 livesession = data.jsession;
+//                 var minBufferTime = 0;
+//                 var maxBufferTime = 6;
+//                 var pos = 0;
+//                 for(var i=0; i<devices.length; i++){
+//                     if(i == 0){
+//                         pos = i;
+//                     }
+//                     var nextpos = pos + 1;
+//                     playLiveVideo(pos,livesession,devices[i],0,1,'Vehicle-'+devices[i],minBufferTime,maxBufferTime);
+//                     playLiveVideo(nextpos,livesession,devices[i],1,1,'Vehicle-'+devices[i],minBufferTime,maxBufferTime);
+//                     pos = nextpos + 1;
+//                 }
 
 
                 
-                // For position 0 front
-                //playLiveVideo(0,livesession,'784087664023',0,1,'Vehicle-784087664023',minBufferTime,maxBufferTime);
+//                 // For position 0 front
+//                 //playLiveVideo(0,livesession,'784087664023',0,1,'Vehicle-784087664023',minBufferTime,maxBufferTime);
 
-                // // For position 0 inner
-                //playLiveVideo(1,livesession,'784087664023',1,1,'Vehicle-784087664023',minBufferTime,maxBufferTime);
+//                 // // For position 0 inner
+//                 //playLiveVideo(1,livesession,'784087664023',1,1,'Vehicle-784087664023',minBufferTime,maxBufferTime);
 
 
-                // // For position 0 front
-                //playLiveVideo(2,livesession,'7840876640491',0,1,'Vehicle-784087664049',minBufferTime,maxBufferTime);
+//                 // // For position 0 front
+//                 //playLiveVideo(2,livesession,'7840876640491',0,1,'Vehicle-784087664049',minBufferTime,maxBufferTime);
 
-                // // For position 0 inner
-                //playLiveVideo(3,livesession,'7840876640491',1,1,'Vehicle-784087664049',minBufferTime,maxBufferTime);
+//                 // // For position 0 inner
+//                 //playLiveVideo(3,livesession,'7840876640491',1,1,'Vehicle-784087664049',minBufferTime,maxBufferTime);
 
-                // For position 0 front
-                //playLiveVideo(2,livesession,'784087664163',0,'1','Vehicle-784087664163',minBufferTime,maxBufferTime);
+//                 // For position 0 front
+//                 //playLiveVideo(2,livesession,'784087664163',0,'1','Vehicle-784087664163',minBufferTime,maxBufferTime);
 
-                // For position 0 inner
-                //playLiveVideo(3,livesession,'784087664163',1,1,'Vehicle-784087664163',minBufferTime,maxBufferTime);
+//                 // For position 0 inner
+//                 //playLiveVideo(3,livesession,'784087664163',1,1,'Vehicle-784087664163',minBufferTime,maxBufferTime);
 
-                $('#cmsv6flash').css('height',window.screen.height - 150);
-                $('#cmsv6flash').css('width',window.screen.width - 20);
-                //$('#cmsv6flash').next('div').css('height',window.screen.height);
-                //$('#cmsv6flash').next('div').css('width',window.screen.height);
-                //$('#Cmsv6H5Video-cmsv6flash-1 canvas').attr('width',800)
-                var height = 'calc(16.6% - 2px)';
-                var width = 'calc(16.6% - 2px)';
-                if(devices.length == 1){
-                    $('#Cmsv6H5Video-cmsv6flash-0').css('width', 'calc(50% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-0').css('height', 'calc(100% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-1').css('width', 'calc(50% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-1').css('height', 'calc(100% - 2px)');
-                }
+//                 $('#cmsv6flash').css('height',window.screen.height - 150);
+//                 $('#cmsv6flash').css('width',window.screen.width - 20);
+//                 //$('#cmsv6flash').next('div').css('height',window.screen.height);
+//                 //$('#cmsv6flash').next('div').css('width',window.screen.height);
+//                 //$('#Cmsv6H5Video-cmsv6flash-1 canvas').attr('width',800)
+//                 var height = 'calc(16.6% - 2px)';
+//                 var width = 'calc(16.6% - 2px)';
+//                 if(devices.length == 1){
+//                     $('#Cmsv6H5Video-cmsv6flash-0').css('width', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-0').css('height', 'calc(100% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-1').css('width', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-1').css('height', 'calc(100% - 2px)');
+//                 }
 
-                if(devices.length == 2){
-                    $('#Cmsv6H5Video-cmsv6flash-0').css('width', 'calc(50% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-0').css('height', 'calc(50% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-1').css('width', 'calc(50% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-1').css('height', 'calc(50% - 2px)');
+//                 if(devices.length == 2){
+//                     $('#Cmsv6H5Video-cmsv6flash-0').css('width', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-0').css('height', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-1').css('width', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-1').css('height', 'calc(50% - 2px)');
 
-                    $('#Cmsv6H5Video-cmsv6flash-2').css('width', 'calc(50% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-2').css('height', 'calc(50% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-3').css('width', 'calc(50% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-3').css('height', 'calc(50% - 2px)');
-                }
+//                     $('#Cmsv6H5Video-cmsv6flash-2').css('width', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-2').css('height', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-3').css('width', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-3').css('height', 'calc(50% - 2px)');
+//                 }
 
-                if(devices.length == 3){
-                    $('#Cmsv6H5Video-cmsv6flash-0').css('width', 'calc(33% - 2px)');$('#Cmsv6H5Video-cmsv6flash-0').css('height', 'calc(50% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-1').css('width', 'calc(33% - 2px)');$('#Cmsv6H5Video-cmsv6flash-1').css('height', 'calc(50% - 2px)');
+//                 if(devices.length == 3){
+//                     $('#Cmsv6H5Video-cmsv6flash-0').css('width', 'calc(33% - 2px)');$('#Cmsv6H5Video-cmsv6flash-0').css('height', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-1').css('width', 'calc(33% - 2px)');$('#Cmsv6H5Video-cmsv6flash-1').css('height', 'calc(50% - 2px)');
 
-                    $('#Cmsv6H5Video-cmsv6flash-2').css('width', 'calc(33% - 2px)');$('#Cmsv6H5Video-cmsv6flash-2').css('height', 'calc(50% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-3').css('width', 'calc(33% - 2px)');$('#Cmsv6H5Video-cmsv6flash-3').css('height', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-2').css('width', 'calc(33% - 2px)');$('#Cmsv6H5Video-cmsv6flash-2').css('height', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-3').css('width', 'calc(33% - 2px)');$('#Cmsv6H5Video-cmsv6flash-3').css('height', 'calc(50% - 2px)');
 
-                    $('#Cmsv6H5Video-cmsv6flash-4').css('width', 'calc(33% - 2px)');$('#Cmsv6H5Video-cmsv6flash-4').css('height', 'calc(50% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-5').css('width', 'calc(33% - 2px)');$('#Cmsv6H5Video-cmsv6flash-5').css('height', 'calc(50% - 2px)');
-                }
+//                     $('#Cmsv6H5Video-cmsv6flash-4').css('width', 'calc(33% - 2px)');$('#Cmsv6H5Video-cmsv6flash-4').css('height', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-5').css('width', 'calc(33% - 2px)');$('#Cmsv6H5Video-cmsv6flash-5').css('height', 'calc(50% - 2px)');
+//                 }
 
-                if(devices.length == 4){
-                    $('#Cmsv6H5Video-cmsv6flash-0').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-0').css('height', 'calc(50% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-1').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-1').css('height', 'calc(50% - 2px)');
+//                 if(devices.length == 4){
+//                     $('#Cmsv6H5Video-cmsv6flash-0').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-0').css('height', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-1').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-1').css('height', 'calc(50% - 2px)');
                     
 
-                    $('#Cmsv6H5Video-cmsv6flash-2').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-2').css('height', 'calc(50% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-3').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-3').css('height', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-2').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-2').css('height', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-3').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-3').css('height', 'calc(50% - 2px)');
 
-                    $('#Cmsv6H5Video-cmsv6flash-4').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-4').css('height', 'calc(50% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-5').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-5').css('height', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-4').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-4').css('height', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-5').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-5').css('height', 'calc(50% - 2px)');
 
-                    $('#Cmsv6H5Video-cmsv6flash-6').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-6').css('height', 'calc(50% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-7').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-7').css('height', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-6').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-6').css('height', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-7').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-7').css('height', 'calc(50% - 2px)');
                     
-                }
+//                 }
 
-                if(devices.length == 5){
-                    $('#Cmsv6H5Video-cmsv6flash-0').css('width', 'calc(20% - 3px)');$('#Cmsv6H5Video-cmsv6flash-0').css('height', 'calc(50% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-1').css('width', 'calc(20% - 3px)');$('#Cmsv6H5Video-cmsv6flash-1').css('height', 'calc(50% - 2px)');
-                    
-
-                    $('#Cmsv6H5Video-cmsv6flash-2').css('width', 'calc(20% - 3px)');$('#Cmsv6H5Video-cmsv6flash-2').css('height', 'calc(50% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-3').css('width', 'calc(20% - 3px)');$('#Cmsv6H5Video-cmsv6flash-3').css('height', 'calc(50% - 2px)');
-
-                    $('#Cmsv6H5Video-cmsv6flash-4').css('width', 'calc(20% - 3px)');$('#Cmsv6H5Video-cmsv6flash-4').css('height', 'calc(50% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-5').css('width', 'calc(20% - 3px)');$('#Cmsv6H5Video-cmsv6flash-5').css('height', 'calc(50% - 2px)');
-
-                    $('#Cmsv6H5Video-cmsv6flash-6').css('width', 'calc(20% - 3px)');$('#Cmsv6H5Video-cmsv6flash-6').css('height', 'calc(50% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-7').css('width', 'calc(20% - 3px)');$('#Cmsv6H5Video-cmsv6flash-7').css('height', 'calc(50% - 2px)');
-
-                    $('#Cmsv6H5Video-cmsv6flash-8').css('width', 'calc(20% - 3px)');$('#Cmsv6H5Video-cmsv6flash-8').css('height', 'calc(50% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-9').css('width', 'calc(20% - 3px)');$('#Cmsv6H5Video-cmsv6flash-9').css('height', 'calc(50% - 2px)');
-                    
-                }
-
-                if(devices.length == 6){
-                    $('#Cmsv6H5Video-cmsv6flash-0').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-0').css('height', 'calc(50% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-1').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-1').css('height', 'calc(50% - 2px)');
+//                 if(devices.length == 5){
+//                     $('#Cmsv6H5Video-cmsv6flash-0').css('width', 'calc(20% - 3px)');$('#Cmsv6H5Video-cmsv6flash-0').css('height', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-1').css('width', 'calc(20% - 3px)');$('#Cmsv6H5Video-cmsv6flash-1').css('height', 'calc(50% - 2px)');
                     
 
-                    $('#Cmsv6H5Video-cmsv6flash-2').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-2').css('height', 'calc(50% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-3').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-3').css('height', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-2').css('width', 'calc(20% - 3px)');$('#Cmsv6H5Video-cmsv6flash-2').css('height', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-3').css('width', 'calc(20% - 3px)');$('#Cmsv6H5Video-cmsv6flash-3').css('height', 'calc(50% - 2px)');
 
-                    $('#Cmsv6H5Video-cmsv6flash-4').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-4').css('height', 'calc(50% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-5').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-5').css('height', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-4').css('width', 'calc(20% - 3px)');$('#Cmsv6H5Video-cmsv6flash-4').css('height', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-5').css('width', 'calc(20% - 3px)');$('#Cmsv6H5Video-cmsv6flash-5').css('height', 'calc(50% - 2px)');
 
-                    $('#Cmsv6H5Video-cmsv6flash-6').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-6').css('height', 'calc(50% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-7').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-7').css('height', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-6').css('width', 'calc(20% - 3px)');$('#Cmsv6H5Video-cmsv6flash-6').css('height', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-7').css('width', 'calc(20% - 3px)');$('#Cmsv6H5Video-cmsv6flash-7').css('height', 'calc(50% - 2px)');
 
-                    $('#Cmsv6H5Video-cmsv6flash-8').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-8').css('height', 'calc(50% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-9').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-9').css('height', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-8').css('width', 'calc(20% - 3px)');$('#Cmsv6H5Video-cmsv6flash-8').css('height', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-9').css('width', 'calc(20% - 3px)');$('#Cmsv6H5Video-cmsv6flash-9').css('height', 'calc(50% - 2px)');
+                    
+//                 }
 
-                    $('#Cmsv6H5Video-cmsv6flash-10').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-10').css('height', 'calc(50% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-11').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-11').css('height', 'calc(50% - 2px)');
-                }
-
-                if(devices.length == 8){
-                    $('#Cmsv6H5Video-cmsv6flash-0').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-0').css('height', 'calc(25% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-1').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-1').css('height', 'calc(25% - 2px)');
+//                 if(devices.length == 6){
+//                     $('#Cmsv6H5Video-cmsv6flash-0').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-0').css('height', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-1').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-1').css('height', 'calc(50% - 2px)');
                     
 
-                    $('#Cmsv6H5Video-cmsv6flash-2').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-2').css('height', 'calc(25% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-3').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-3').css('height', 'calc(25% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-2').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-2').css('height', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-3').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-3').css('height', 'calc(50% - 2px)');
 
-                    $('#Cmsv6H5Video-cmsv6flash-4').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-4').css('height', 'calc(25% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-5').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-5').css('height', 'calc(25% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-4').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-4').css('height', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-5').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-5').css('height', 'calc(50% - 2px)');
 
-                    $('#Cmsv6H5Video-cmsv6flash-6').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-6').css('height', 'calc(25% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-7').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-7').css('height', 'calc(25% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-6').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-6').css('height', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-7').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-7').css('height', 'calc(50% - 2px)');
 
-                    $('#Cmsv6H5Video-cmsv6flash-8').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-8').css('height', 'calc(25% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-9').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-9').css('height', 'calc(25% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-8').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-8').css('height', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-9').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-9').css('height', 'calc(50% - 2px)');
 
-                    $('#Cmsv6H5Video-cmsv6flash-10').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-10').css('height', 'calc(25% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-11').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-11').css('height', 'calc(25% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-10').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-10').css('height', 'calc(50% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-11').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-11').css('height', 'calc(50% - 2px)');
+//                 }
 
-                    $('#Cmsv6H5Video-cmsv6flash-12').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-12').css('height', 'calc(25% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-13').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-13').css('height', 'calc(25% - 2px)');
+//                 if(devices.length == 8){
+//                     $('#Cmsv6H5Video-cmsv6flash-0').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-0').css('height', 'calc(25% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-1').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-1').css('height', 'calc(25% - 2px)');
+                    
 
-                    $('#Cmsv6H5Video-cmsv6flash-14').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-14').css('height', 'calc(25% - 2px)');
-                    $('#Cmsv6H5Video-cmsv6flash-15').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-15').css('height', 'calc(25% - 2px)');
-                }
+//                     $('#Cmsv6H5Video-cmsv6flash-2').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-2').css('height', 'calc(25% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-3').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-3').css('height', 'calc(25% - 2px)');
+
+//                     $('#Cmsv6H5Video-cmsv6flash-4').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-4').css('height', 'calc(25% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-5').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-5').css('height', 'calc(25% - 2px)');
+
+//                     $('#Cmsv6H5Video-cmsv6flash-6').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-6').css('height', 'calc(25% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-7').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-7').css('height', 'calc(25% - 2px)');
+
+//                     $('#Cmsv6H5Video-cmsv6flash-8').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-8').css('height', 'calc(25% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-9').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-9').css('height', 'calc(25% - 2px)');
+
+//                     $('#Cmsv6H5Video-cmsv6flash-10').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-10').css('height', 'calc(25% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-11').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-11').css('height', 'calc(25% - 2px)');
+
+//                     $('#Cmsv6H5Video-cmsv6flash-12').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-12').css('height', 'calc(25% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-13').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-13').css('height', 'calc(25% - 2px)');
+
+//                     $('#Cmsv6H5Video-cmsv6flash-14').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-14').css('height', 'calc(25% - 2px)');
+//                     $('#Cmsv6H5Video-cmsv6flash-15').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-15').css('height', 'calc(25% - 2px)');
+//                 }
                 
-            } else {
-                alert('Login failed');
-            }
-        },
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-            try {
-                if (p.onError) p.onError(XMLHttpRequest, textStatus, errorThrown);
-            } catch (e) {
-            }
-            alert('Login failed');
+//             } else {
+//                 alert('Login failed');
+//             }
+//         },
+//         error: function (XMLHttpRequest, textStatus, errorThrown) {
+//             try {
+//                 if (p.onError) p.onError(XMLHttpRequest, textStatus, errorThrown);
+//             } catch (e) {
+//             }
+//             alert('Login failed');
+//         }
+//     });
+// }
+
+function initSession() {
+    var minBufferTime = 0;
+    var maxBufferTime = 6;
+    var pos = 0;
+    for(var i=0; i<devices.length; i++){
+        if(i == 0){
+            pos = i;
         }
-    });
+        var nextpos = pos + 1;
+        playLiveVideo(pos,livesession,devices[i],0,1,'Vehicle-'+devices[i],minBufferTime,maxBufferTime);
+        playLiveVideo(nextpos,livesession,devices[i],1,1,'Vehicle-'+devices[i],minBufferTime,maxBufferTime);
+        pos = nextpos + 1;
+    }
+
+    $('#cmsv6flash').css('height',window.screen.height - 150);
+    $('#cmsv6flash').css('width',window.screen.width - 20);
+    var height = 'calc(16.6% - 2px)';
+    var width = 'calc(16.6% - 2px)';
+    if(devices.length == 1){
+        $('#Cmsv6H5Video-cmsv6flash-0').css('width', 'calc(50% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-0').css('height', 'calc(100% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-1').css('width', 'calc(50% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-1').css('height', 'calc(100% - 2px)');
+    }
+
+    if(devices.length == 2){
+        $('#Cmsv6H5Video-cmsv6flash-0').css('width', 'calc(50% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-0').css('height', 'calc(50% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-1').css('width', 'calc(50% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-1').css('height', 'calc(50% - 2px)');
+
+        $('#Cmsv6H5Video-cmsv6flash-2').css('width', 'calc(50% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-2').css('height', 'calc(50% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-3').css('width', 'calc(50% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-3').css('height', 'calc(50% - 2px)');
+    }
+
+    if(devices.length == 3){
+        $('#Cmsv6H5Video-cmsv6flash-0').css('width', 'calc(33% - 2px)');$('#Cmsv6H5Video-cmsv6flash-0').css('height', 'calc(50% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-1').css('width', 'calc(33% - 2px)');$('#Cmsv6H5Video-cmsv6flash-1').css('height', 'calc(50% - 2px)');
+
+        $('#Cmsv6H5Video-cmsv6flash-2').css('width', 'calc(33% - 2px)');$('#Cmsv6H5Video-cmsv6flash-2').css('height', 'calc(50% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-3').css('width', 'calc(33% - 2px)');$('#Cmsv6H5Video-cmsv6flash-3').css('height', 'calc(50% - 2px)');
+
+        $('#Cmsv6H5Video-cmsv6flash-4').css('width', 'calc(33% - 2px)');$('#Cmsv6H5Video-cmsv6flash-4').css('height', 'calc(50% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-5').css('width', 'calc(33% - 2px)');$('#Cmsv6H5Video-cmsv6flash-5').css('height', 'calc(50% - 2px)');
+    }
+
+    if(devices.length == 4){
+        $('#Cmsv6H5Video-cmsv6flash-0').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-0').css('height', 'calc(50% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-1').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-1').css('height', 'calc(50% - 2px)');
+        
+
+        $('#Cmsv6H5Video-cmsv6flash-2').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-2').css('height', 'calc(50% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-3').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-3').css('height', 'calc(50% - 2px)');
+
+        $('#Cmsv6H5Video-cmsv6flash-4').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-4').css('height', 'calc(50% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-5').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-5').css('height', 'calc(50% - 2px)');
+
+        $('#Cmsv6H5Video-cmsv6flash-6').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-6').css('height', 'calc(50% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-7').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-7').css('height', 'calc(50% - 2px)');
+        
+    }
+
+    if(devices.length == 5){
+        $('#Cmsv6H5Video-cmsv6flash-0').css('width', 'calc(20% - 3px)');$('#Cmsv6H5Video-cmsv6flash-0').css('height', 'calc(50% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-1').css('width', 'calc(20% - 3px)');$('#Cmsv6H5Video-cmsv6flash-1').css('height', 'calc(50% - 2px)');
+        
+
+        $('#Cmsv6H5Video-cmsv6flash-2').css('width', 'calc(20% - 3px)');$('#Cmsv6H5Video-cmsv6flash-2').css('height', 'calc(50% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-3').css('width', 'calc(20% - 3px)');$('#Cmsv6H5Video-cmsv6flash-3').css('height', 'calc(50% - 2px)');
+
+        $('#Cmsv6H5Video-cmsv6flash-4').css('width', 'calc(20% - 3px)');$('#Cmsv6H5Video-cmsv6flash-4').css('height', 'calc(50% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-5').css('width', 'calc(20% - 3px)');$('#Cmsv6H5Video-cmsv6flash-5').css('height', 'calc(50% - 2px)');
+
+        $('#Cmsv6H5Video-cmsv6flash-6').css('width', 'calc(20% - 3px)');$('#Cmsv6H5Video-cmsv6flash-6').css('height', 'calc(50% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-7').css('width', 'calc(20% - 3px)');$('#Cmsv6H5Video-cmsv6flash-7').css('height', 'calc(50% - 2px)');
+
+        $('#Cmsv6H5Video-cmsv6flash-8').css('width', 'calc(20% - 3px)');$('#Cmsv6H5Video-cmsv6flash-8').css('height', 'calc(50% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-9').css('width', 'calc(20% - 3px)');$('#Cmsv6H5Video-cmsv6flash-9').css('height', 'calc(50% - 2px)');
+        
+    }
+
+    if(devices.length == 6){
+        $('#Cmsv6H5Video-cmsv6flash-0').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-0').css('height', 'calc(50% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-1').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-1').css('height', 'calc(50% - 2px)');
+        
+
+        $('#Cmsv6H5Video-cmsv6flash-2').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-2').css('height', 'calc(50% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-3').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-3').css('height', 'calc(50% - 2px)');
+
+        $('#Cmsv6H5Video-cmsv6flash-4').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-4').css('height', 'calc(50% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-5').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-5').css('height', 'calc(50% - 2px)');
+
+        $('#Cmsv6H5Video-cmsv6flash-6').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-6').css('height', 'calc(50% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-7').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-7').css('height', 'calc(50% - 2px)');
+
+        $('#Cmsv6H5Video-cmsv6flash-8').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-8').css('height', 'calc(50% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-9').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-9').css('height', 'calc(50% - 2px)');
+
+        $('#Cmsv6H5Video-cmsv6flash-10').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-10').css('height', 'calc(50% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-11').css('width', 'calc(16.6% - 3px)');$('#Cmsv6H5Video-cmsv6flash-11').css('height', 'calc(50% - 2px)');
+    }
+
+    if(devices.length == 8){
+        $('#Cmsv6H5Video-cmsv6flash-0').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-0').css('height', 'calc(25% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-1').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-1').css('height', 'calc(25% - 2px)');
+        
+
+        $('#Cmsv6H5Video-cmsv6flash-2').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-2').css('height', 'calc(25% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-3').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-3').css('height', 'calc(25% - 2px)');
+
+        $('#Cmsv6H5Video-cmsv6flash-4').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-4').css('height', 'calc(25% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-5').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-5').css('height', 'calc(25% - 2px)');
+
+        $('#Cmsv6H5Video-cmsv6flash-6').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-6').css('height', 'calc(25% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-7').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-7').css('height', 'calc(25% - 2px)');
+
+        $('#Cmsv6H5Video-cmsv6flash-8').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-8').css('height', 'calc(25% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-9').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-9').css('height', 'calc(25% - 2px)');
+
+        $('#Cmsv6H5Video-cmsv6flash-10').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-10').css('height', 'calc(25% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-11').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-11').css('height', 'calc(25% - 2px)');
+
+        $('#Cmsv6H5Video-cmsv6flash-12').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-12').css('height', 'calc(25% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-13').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-13').css('height', 'calc(25% - 2px)');
+
+        $('#Cmsv6H5Video-cmsv6flash-14').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-14').css('height', 'calc(25% - 2px)');
+        $('#Cmsv6H5Video-cmsv6flash-15').css('width', 'calc(25% - 3px)');$('#Cmsv6H5Video-cmsv6flash-15').css('height', 'calc(25% - 2px)');
+    }
 }
+
 
 function setVideoServer() {
     if (!isInitFinished) {
