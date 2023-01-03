@@ -6,16 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Shoora</title>
     <link href="../../public/css/button.css" type="text/css" rel="stylesheet">
-    <link href="../../public/css/video.css" type="text/css" rel="stylesheet">
+    <link href="../../public/css/live_video.css" type="text/css" rel="stylesheet">
     <script type="text/javascript" src="../../public/js/cmsv6player.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
-<body onload="onReady();">
+<body onload="onReady();" onresize="setScreen();" style="height:100%">
   {{{body}}}
   <input id="devicelist" name="devicelist" value="{{devicelist}}" style="display:none">
   <input id="jsessionid" name="jsessionid" value="{{jsessionId}}" style="display:none">
+  <input id="channel" name="channel" value="{{channel}}" style="display:none">
 </body>
-<script src="../../public/js/custom.js"></script>
+<script src="../../public/js/liveview_custom.js"></script>
 
 
 

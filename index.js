@@ -39,12 +39,10 @@ function getRawApiResponse(formData){
             }
         );
     });
-  }
+}
 
 
 app.get('/videofeed/', (req, res) => {
-    console.log(req.params);
-    console.log(req.query.device)
     let devices = req.query.device
     let email = req.query.email
     let pass = req.query.password
@@ -52,49 +50,55 @@ app.get('/videofeed/', (req, res) => {
     const formData = {
         email: email, 
         password: pass
-     };
-
-    // var body = JSON.stringify({ 
-    //     email: email, 
-    //     password: password
-    //   });
-    // var postBody = {
-    //     url: 'https://todoist.com/oauth/access_token',
-    //     body: body,
-    //     headers: {
-    //         'Content-Type': 'application/x-www-form-urlencoded'
-    //     }
-    // };
-    // request.post(
-    //     {
-    //       url: 'http://127.0.0.1:8000/auth/api/v1/token/',
-    //       form: formData
-    //     },
-    //     function (err, httpResponse, body) {
-    //       console.log(err, body);
-    //     }
-    //   );
+    };
 
     // authenticate and get jsession id 
     getRawApiResponse(formData)
         .then(function(body){
-            console.log("body ", body)
             body = JSON.parse(body)
             let jsessionId = null
             let jsession_data = body['jsession_data']
-            console.log("jsession - data ", jsession_data)
             if (jsession_data['status_code'] == 200){
                 jsessionId = jsession_data['data']['JSESSIONID']
             }
-            // res.render('index', { title: 'Express', api: "some", body: body});
             res.render('home',{devicelist:devices, jsessionId: jsessionId});
-        }).catch(function(err){
+    }).catch(function(err){
             console.log("error ", err)
             alert("Something went wrong!!")
-        })
-        
-    // res.render('home',{devicelist:req.params.devices});
-})
+    });
+});
+
+// Launch single video channel vise
+app.get('/liveview/', (req, res) => {
+    let devices = req.query.device;
+    let email = req.query.email;
+    let pass = req.query.password;
+    let channel = 0;
+    channel = req.query.channel;
+    const formData = {
+        email: email, 
+        password: pass
+    };
+
+    // authenticate and get jsession id 
+    if(devices){
+        getRawApiResponse(formData)
+            .then(function(body){
+                body = JSON.parse(body)
+                let jsessionId = null
+                let jsession_data = body['jsession_data']
+                if (jsession_data['status_code'] == 200){
+                    jsessionId = jsession_data['data']['JSESSIONID']
+                }
+                res.render('liveview',{layout: 'live',devicelist:devices, jsessionId: jsessionId, channel:channel});
+        }).catch(function(err){
+                console.log("error ", err)
+                alert("Something went wrong!!")
+        });
+    }else{
+        alert("device id needed!!")
+    }
+});
 
 app.listen(port, () => { 
     console.log(`Server is running on port: ${port}`); 
